@@ -1,14 +1,17 @@
 package com.example.recipeapp
 
 import android.app.Application
+import com.example.recipeapp.dbFactory.DatabaseFactory
+import com.example.recipeapp.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
-import  com.example.recipeapp.di.initKoin
+
 
 class MainApplication: Application() {
 
     private val androidModules = module {
-
+        single { DatabaseFactory(applicationContext) }
+//        single { MultiplatformSettingsFactory(applicationContext) }
     }
 
     override fun onCreate() {
