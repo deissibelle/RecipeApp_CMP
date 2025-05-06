@@ -4,6 +4,7 @@ import com.example.recipeapp.features.common.data.database.DbHelper
 
 import app.cash.sqldelight.async.coroutines.awaitAsList
 import app.cash.sqldelight.async.coroutines.awaitAsOneOrNull
+import com.example.recipeapp.features.common.data.database.recipeEntityMapper
 import com.example.recipeapp.features.common.domain.entities.RecipeItem
 
 class RecipeDao(
@@ -96,24 +97,21 @@ class RecipeDao(
 
     suspend fun getAllRecipes(): List<RecipeItem> {
 
-//        return dbHelper.withDatabase { database ->
-//            database.recipeEntityQueries.selectAllRecipes().awaitAsList().map {
-//                recipeEntityMapper(it)
-//            }
-//        }
-
-        return TODO("Provide the return value")
+        return dbHelper.withDatabase { database ->
+            database.recipeEntityQueries.selectAllRecipes().awaitAsList().map {
+                recipeEntityMapper(it)
+            }
+        }
     }
-//
-//    suspend fun getRecipeById(id: Long): RecipeItem? {
-//
-//        return dbHelper.withDatabase { database ->
-//            database.recipeEntityQueries.selectRecipeById(id).awaitAsOneOrNull()?.let {
-//                recipeEntityMapper(it)
-//            }
-//        }
-//
-//    }
+    suspend fun getRecipeById(id: Long): RecipeItem? {
+
+        return dbHelper.withDatabase { database ->
+            database.recipeEntityQueries.selectRecipeById(id).awaitAsOneOrNull()?.let {
+                recipeEntityMapper(it)
+            }
+        }
+
+    }
 
     suspend fun deleteRecipeById(id: Long) {
         dbHelper.withDatabase { database ->
@@ -122,12 +120,12 @@ class RecipeDao(
     }
 
 
-//    suspend fun searchRecipesByText(text: String): List<RecipeItem> {
-//        return dbHelper.withDatabase { database ->
-//            database.recipeEntityQueries.searchRecipeByText(text).awaitAsList().map {
-//                recipeEntityMapper(it)
-//            }
-//        }
-//    }
+    suspend fun searchRecipesByText(text: String): List<RecipeItem> {
+        return dbHelper.withDatabase { database ->
+            database.recipeEntityQueries.searchRecipeByText(text).awaitAsList().map {
+                recipeEntityMapper(it)
+            }
+        }
+    }
 
 }

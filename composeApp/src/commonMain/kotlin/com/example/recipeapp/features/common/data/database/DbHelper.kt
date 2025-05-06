@@ -2,8 +2,10 @@ package com.example.recipeapp.features.common.data.database
 
 import com.example.recipeapp.RecipeAppDb
 import com.example.recipeapp.dbFactory.DatabaseFactory
+import comexamplerecipeapp.Recipe
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import listOfStringsAdapter
 
 class DbHelper (
     private val driverFactory: DatabaseFactory
@@ -12,7 +14,7 @@ class DbHelper (
     private val mutex = Mutex()
 
 
-    suspend fun <Result: Any> withDatabase(block: suspend(RecipeAppDb)->Result) = mutex.withLock{
+    suspend fun <Result: Any?> withDatabase(block: suspend(RecipeAppDb)->Result) = mutex.withLock{
         if (db==null){
             db = createDb(
                 driverFactory
@@ -23,7 +25,10 @@ class DbHelper (
     private suspend fun createDb(driverFactory: DatabaseFactory): RecipeAppDb{
         return RecipeAppDb(
             driver = driverFactory.createDriver(),
-            RecipeAdapter = TODO()
+            RecipeAdapter = comexamplerecipeapp.Recipe.Adapter(
+                ingredientsAdapter = listOfStringsAdapter,
+                instructionsAdapter = listOfStringsAdapter
+            )
         )
     }
 }

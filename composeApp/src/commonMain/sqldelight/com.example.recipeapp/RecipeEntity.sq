@@ -19,8 +19,7 @@ CREATE TABLE Recipe (
 
 insertRecipe:
 INSERT INTO Recipe(id, title, description, category, area, imageUrl, youtubeLink, ingredients, instructions, isFavorite, rating, duration, difficulty)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-);
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 upsertRecipe {
     UPDATE Recipe
