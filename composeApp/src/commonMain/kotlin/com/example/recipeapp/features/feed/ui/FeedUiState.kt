@@ -1,4 +1,4 @@
-package com.example.recipeapp.features.favorites.navigation.ui
+package com.example.recipeapp.features.feed.ui
 
 import com.example.recipeapp.features.common.domain.entities.RecipeItem
 

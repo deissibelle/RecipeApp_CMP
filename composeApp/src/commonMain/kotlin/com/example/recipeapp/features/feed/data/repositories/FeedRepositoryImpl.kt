@@ -11,6 +11,7 @@ class FeedRepositoryImpl(
 ): FeedRepository {
 
     override suspend fun getRecipesList(): Result<List<RecipeItem>> {
+
         return try {
             val recipeListCache = feedLocalDataSource.getRecipesList()
             val count = recipeListCache.count()

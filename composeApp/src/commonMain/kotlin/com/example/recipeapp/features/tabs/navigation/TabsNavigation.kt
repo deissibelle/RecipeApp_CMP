@@ -16,14 +16,13 @@ fun NavController.navigateToTabs(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.tabsNavGraph(
 
     tabNavController: NavHostController,
-    function: () -> Unit,
-
+    navigateToSearch: () -> Unit,
 ) {
 
     composable(Screen.Tabs.route) {
         TabsRoute(
             tabNavController = tabNavController,
-//
+            navigateToSearch = navigateToSearch
         )
     }
 
