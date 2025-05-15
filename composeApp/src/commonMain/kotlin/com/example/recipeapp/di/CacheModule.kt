@@ -1,6 +1,7 @@
 package com.example.recipeapp.di
 
 import com.example.recipeapp.features.common.data.database.DbHelper
+import com.example.recipeapp.features.common.data.database.daos.FavoriteRecipeDao
 import com.example.recipeapp.features.common.data.database.daos.RecipeDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,6 @@ fun cacheModule() = module {
 
     single { DbHelper(get()) }
     single { RecipeDao(get()) }
-//    single { FavoriteRecipeDao(get()) }
+    single { FavoriteRecipeDao(get()) }
 
 }

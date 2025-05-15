@@ -9,19 +9,27 @@ import androidx.navigation.compose.composable
 import com.example.recipeapp.features.app.data.Screen
 import com.example.recipeapp.features.tabs.ui.TabsRoute
 
+
 fun NavController.navigateToTabs(navOptions: NavOptions? = null) {
     navigate(Screen.Tabs.route)
 }
 
 fun NavGraphBuilder.tabsNavGraph(
-
-    tabNavController: NavHostController,
+    navigateToDetail: (Long) -> Unit,
     navigateToSearch: () -> Unit,
+    tabNavController: NavHostController,
+    isUserLoggedIn: () -> Boolean,
+    openLoginBottomSheet: (() -> Unit) -> Unit,
+    onLogout : () -> Unit
 ) {
 
     composable(Screen.Tabs.route) {
         TabsRoute(
             tabNavController = tabNavController,
+            navigateToDetail = navigateToDetail,
+            isUserLoggedIn = isUserLoggedIn,
+            openLoginBottomSheet = openLoginBottomSheet,
+            onLogout = onLogout,
             navigateToSearch = navigateToSearch
         )
     }

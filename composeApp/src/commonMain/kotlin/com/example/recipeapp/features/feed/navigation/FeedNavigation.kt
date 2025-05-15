@@ -7,20 +7,22 @@ import androidx.navigation.compose.composable
 import com.example.recipeapp.features.app.data.Screen
 import com.example.recipeapp.features.feed.ui.FeedRoute
 
-fun NavController.navigateToFeed(
-    navOptions: NavOptions?=null
-){
-navigate(Screen.Home.route)
+fun NavController.navigateToFeed(navOptions: NavOptions? = null) {
+    navigate(Screen.Home.route)
 }
+
 fun NavGraphBuilder.feedNavGraph(
+    navigateToDetail: (Long) -> Unit,
+    isUserLoggedIn: () -> Boolean,
+    openLoginBottomSheet: (() -> Unit) -> Unit,
     navigateToSearch: () -> Unit,
 ) {
 
     composable(Screen.Home.route) {
         FeedRoute(
+            navigateToDetail = navigateToDetail,
             navigateToSearch = navigateToSearch
         )
     }
-
 
 }

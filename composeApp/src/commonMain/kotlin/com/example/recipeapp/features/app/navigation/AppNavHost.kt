@@ -11,26 +11,46 @@ import com.example.recipeapp.features.search.navigation.searchNavGraph
 import com.example.recipeapp.features.tabs.navigation.tabsNavGraph
 
 
-@Composable 
-fun AppNavHost (
-    modifier:Modifier = Modifier,
-    appState:AppState,
-    startDestination: String = Screen.Tabs.route
-){
+@Composable
+fun AppNavHost(
+    modifier: Modifier = Modifier,
+    appState: AppState,
+    startDestination: String = Screen.Tabs.route,
+    isUserLoggedIn: () -> Boolean,
+    openLoginBottomSheet: (() -> Unit) -> Unit,
+    onLogout: () -> Unit
+) {
+
     val navController = appState.navController
+
     val tabNavController = rememberNavController()
-    
-    NavHost(navController,startDestination=startDestination){
+
+    NavHost(navController, startDestination = startDestination) {
+
         tabsNavGraph(
             tabNavController = tabNavController,
+            navigateToDetail = {
+                appState.navigateToDetail(it)
+            },
+            isUserLoggedIn = isUserLoggedIn,
+            openLoginBottomSheet = openLoginBottomSheet,
+            onLogout = onLogout,
+            navigateToSearch = appState::navigateToSearch
+        )
 
-        ){
-            searchNavGraph(
+        searchNavGraph(
+//            navigateToDetail = {
+//                appState.navigateToDetail(it)
+//            },
+//            onBackPress = appState::navigateBack
+        )
 
-            )
-            detailNavGraph(
-
-            )
-        }
+        detailNavGraph(
+            onBackClick = appState::navigateBack,
+            isUserLoggedIn = isUserLoggedIn,
+            openLoginBottomSheet = openLoginBottomSheet,
+        )
     }
+
+
 }

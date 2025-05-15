@@ -49,9 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.recipeapp.features.common.domain.entities.RecipeItem
+import com.example.recipeapp.features.common.ui.components.ErrorContent
+import com.example.recipeapp.features.common.ui.components.Loader
 import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun FeedRoute(
+    navigateToDetail: (Long) -> Unit,
     navigateToSearch: () -> Unit,
     feedViewModel: FeedViewModel = koinViewModel()
 ) {
@@ -59,6 +62,7 @@ fun FeedRoute(
     val feedUiState = feedViewModel.feedUiState.collectAsState()
 
     FeedScreen(
+        navigateToDetail = navigateToDetail,
         feedUiState = feedUiState.value,
         navigateToSearch = navigateToSearch
     )
@@ -66,9 +70,9 @@ fun FeedRoute(
 }
 
 
-
 @Composable
 fun FeedScreen(
+    navigateToDetail: (Long) -> Unit,
     feedUiState: FeedUiState,
     navigateToSearch: () -> Unit,
 ) {
@@ -89,7 +93,7 @@ fun FeedScreen(
             }
 
             recipes != null -> {
-                FeedContent(innerPadding = innerPadding, recipes = recipes)
+                FeedContent(innerPadding = innerPadding, recipes = recipes, navigateToDetail = navigateToDetail)
             }
         }
 
@@ -98,59 +102,6 @@ fun FeedScreen(
 }
 
 
-@Composable
-private fun Loader(){
-    Column (
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier= Modifier.fillMaxSize()
-    ){
-        CircularProgressIndicator(color = MaterialTheme.colorScheme.primaryContainer)
-    }
-}
-
-@Composable
-private fun ErrorContent(){
-    Column (
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier= Modifier.fillMaxSize()
-    ){
-        Text(
-            "Error in Loading Items",
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.error
-            )
-        )
-    }
-}
-
-
-@Composable
-private fun FeedContent(
-    innerPadding: PaddingValues,
-    recipes: List<RecipeItem>
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(
-            top = innerPadding.calculateTopPadding()
-        )
-    ) {
-        item(
-            span = { GridItemSpan(maxLineSpan) }
-        ) {
-            TopRecipesList(title = "Top Recommendations", recipes = recipes.reversed())
-        }
-
-        recipesOfTheWeek(
-            title = "Recipes Of the Week", recipes = recipes
-        )
-
-    }
-}
 @Composable
 private fun TopBar(navigateToSearch: () -> Unit) {
     Column(
@@ -161,7 +112,7 @@ private fun TopBar(navigateToSearch: () -> Unit) {
     ) {
 
         Text(
-            text = "Hi Sibelle!",
+            text = "Hi Alan!",
             color = MaterialTheme.colorScheme.primaryContainer,
             style = MaterialTheme.typography.titleMedium
         )
@@ -219,7 +170,35 @@ private fun SearchBar(
 }
 
 @Composable
+private fun FeedContent(
+    navigateToDetail: (Long) -> Unit,
+    innerPadding: PaddingValues,
+    recipes: List<RecipeItem>
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(
+            top = innerPadding.calculateTopPadding()
+        )
+    ) {
+        item(
+            span = { GridItemSpan(maxLineSpan) }
+        ) {
+            TopRecipesList(title = "Top Recommendations", recipes = recipes.reversed(), navigateToDetail = navigateToDetail)
+        }
+
+        recipesOfTheWeek(
+            title = "Recipes Of the Week", recipes = recipes,  navigateToDetail = navigateToDetail
+        )
+
+    }
+}
+
+@Composable
 private fun TopRecipesList(
+    navigateToDetail: (Long) -> Unit,
     title: String,
     recipes: List<RecipeItem>
 ) {
@@ -242,7 +221,9 @@ private fun TopRecipesList(
                 RecipeCard(
                     recipe,
                     modifier = Modifier.width(110.dp),
-                    imageModifier = imageModifier
+                    imageModifier = imageModifier.clickable {
+                        navigateToDetail(recipe.id)
+                    }
                 )
             }
 
@@ -251,6 +232,44 @@ private fun TopRecipesList(
     }
 
 }
+
+
+private fun LazyGridScope.recipesOfTheWeek(
+    navigateToDetail: (Long) -> Unit,
+    title: String,
+    recipes: List<RecipeItem>
+) {
+
+    item(
+        span = { GridItemSpan(maxLineSpan) }
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontSize = 18.sp
+            ),
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp)
+        )
+    }
+
+    itemsIndexed(recipes, key = { _, it -> it.id }) { index, recipe ->
+
+        val cardPaddingStart = if (index % 2 == 0) 16.dp else 0.dp
+        val cardPaddingEnd = if (index % 2 == 0) 0.dp else 16.dp
+
+        val imageModifier =
+            Modifier.fillMaxWidth().height(130.dp).clip(RoundedCornerShape(16.dp))
+        RecipeCard(
+            recipe,
+            modifier = Modifier.padding(start = cardPaddingStart, end = cardPaddingEnd),
+            imageModifier = imageModifier.clickable {
+                navigateToDetail(recipe.id)
+            }
+        )
+    }
+
+}
+
 @Composable
 private fun RecipeCard(
     recipe: RecipeItem,
@@ -322,39 +341,6 @@ private fun RecipeCard(
         }
 
 
-    }
-
-}
-
-private fun LazyGridScope.recipesOfTheWeek(
-    title: String,
-    recipes: List<RecipeItem>
-) {
-
-    item(
-        span = { GridItemSpan(maxLineSpan) }
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontSize = 18.sp
-            ),
-            modifier = Modifier.padding(top = 16.dp, start = 16.dp)
-        )
-    }
-
-    itemsIndexed(recipes, key = { _, it -> it.id }) { index, recipe ->
-
-        val cardPaddingStart = if (index % 2 == 0) 16.dp else 0.dp
-        val cardPaddingEnd = if (index % 2 == 0) 0.dp else 16.dp
-
-        val imageModifier =
-            Modifier.fillMaxWidth().height(130.dp).clip(RoundedCornerShape(16.dp))
-        RecipeCard(
-            recipe,
-            modifier = Modifier.padding(start = cardPaddingStart, end = cardPaddingEnd),
-            imageModifier = imageModifier
-        )
     }
 
 }
