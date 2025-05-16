@@ -4,6 +4,7 @@ import com.example.recipeapp.features.detail.ui.RecipeDetailViewModel
 import com.example.recipeapp.features.favorites.ui.FavoritesScreenViewModel
 import com.example.recipeapp.features.feed.ui.FeedViewModel
 import com.example.recipeapp.features.login.ui.LoginViewModel
+import com.example.recipeapp.features.profile.ui.ProfileViewModel
 import org.koin.core.module.dsl.viewModel
 
 import org.koin.dsl.module
@@ -25,4 +26,8 @@ fun viewModelModule()  = module {
     viewModel {
         FavoritesScreenViewModel(get())
     }
+    viewModel {
+        ProfileViewModel()
+    }
+
 }

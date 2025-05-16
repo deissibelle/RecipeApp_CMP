@@ -112,7 +112,7 @@ private fun TopBar(navigateToSearch: () -> Unit) {
     ) {
 
         Text(
-            text = "Hi Alan!",
+            text = "Hi Sibelle!",
             color = MaterialTheme.colorScheme.primaryContainer,
             style = MaterialTheme.typography.titleMedium
         )
