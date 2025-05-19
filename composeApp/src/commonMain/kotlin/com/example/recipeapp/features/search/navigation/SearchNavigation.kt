@@ -9,16 +9,20 @@ import com.example.recipeapp.features.app.data.Screen
 import com.example.recipeapp.features.favorites.ui.FavoritesRoute
 import com.example.recipeapp.features.search.ui.SearchRoute
 
-fun NavController.navigateToSearch(
-    navOptions: NavOptions?=null
-){
+fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
     navigate(Screen.Search.route)
 }
-fun NavGraphBuilder.searchNavGraph() {
+
+fun NavGraphBuilder.searchNavGraph(
+    navigateToDetail: (Long) -> Unit,
+    onBackPress: () -> Unit
+) {
 
     composable(Screen.Search.route) {
-        SearchRoute()
+        SearchRoute(
+            navigateToDetail = navigateToDetail,
+            onBackPress = onBackPress
+        )
     }
-
 
 }

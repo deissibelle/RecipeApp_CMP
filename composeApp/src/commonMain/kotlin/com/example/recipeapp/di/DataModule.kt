@@ -17,6 +17,10 @@ import com.example.recipeapp.features.favorites.data.FavoriteRecipeLocalDataSour
 import com.example.recipeapp.features.favorites.data.FavoriteRecipeLocalDataSourceImpl
 import com.example.recipeapp.features.favorites.data.FavoriteRecipeRepositoryImpl
 import com.example.recipeapp.features.favorites.domain.FavoriteRecipeRepository
+import com.example.recipeapp.features.search.data.datasources.SearchRecipeLocalDataSource
+import com.example.recipeapp.features.search.data.datasources.SearchRecipeLocalDataSourceImpl
+import com.example.recipeapp.features.search.data.repositories.SearchRecipeRepositoryImpl
+import com.example.recipeapp.features.search.domain.repositories.SearchRecipeRepository
 import com.example.recipeapp.preferences.AppPreferences
 import com.example.recipeapp.preferences.AppPreferencesImpl
 
@@ -36,6 +40,6 @@ fun dataModule()  = module {
     single<RecipeDetailRepository> { RecipeDetailRepositoryImpl(get(), get()) }
     single<FavoriteRecipeRepository> { FavoriteRecipeRepositoryImpl(get()) }
 
-//    single<SearchRecipeLocalDataSource> { SearchRecipeLocalDataSourceImpl(get()) }
-//    single<SearchRecipeRepository> { SearchRecipeRepositoryImpl(get()) }
+    single<SearchRecipeLocalDataSource> { SearchRecipeLocalDataSourceImpl(get()) }
+    single<SearchRecipeRepository> { SearchRecipeRepositoryImpl(get()) }
 }
