@@ -6,8 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
-
+import kotlin.coroutines.cancellation.CancellationException
 
 
 class LoginViewModel: ViewModel() {
@@ -17,24 +16,21 @@ class LoginViewModel: ViewModel() {
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
-
             _loginState.value = LoginState.Loading
 
             try {
-
                 delay(1500)
 
                 if (email == "test@gmail.com" && password == "test") {
                     _loginState.value = LoginState.Success
                 } else {
-                    _loginState.value = LoginState.Error(
-                        "Invalid email or password"
-                    )
+                    _loginState.value = LoginState.Error("Invalid email or password")
                 }
+            } catch (e: CancellationException) {
+                println("Login coroutine was cancelled")
+                // ne rien faire ou reset l'état
             } catch (e: Exception) {
-                _loginState.value = LoginState.Error(
-                    "An unexpected error in login"
-                )
+                _loginState.value = LoginState.Error("An unexpected error in login")
             }
         }
     }

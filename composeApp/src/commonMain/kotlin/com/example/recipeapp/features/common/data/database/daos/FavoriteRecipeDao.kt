@@ -24,7 +24,7 @@ class FavoriteRecipeDao(
 
     suspend fun removeFavorite(recipeId: Long) {
         dbHelper.withDatabase { database ->
-            database.favoriteRecipeQueries.detelteFavoriteByRecipeById(
+            database.favoriteRecipeQueries.deleteFavoriteByRecipeId(
                 recipe_id = recipeId
             )
         }

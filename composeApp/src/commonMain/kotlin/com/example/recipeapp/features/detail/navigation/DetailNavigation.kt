@@ -13,8 +13,9 @@ import com.example.recipeapp.features.detail.ui.DetailRoute
 const val RECIPE_ID_ARG = "recipeId"
 
 fun NavController.navigateToDetail(id: Long, navOptions: NavOptions? = null) {
-    navigate(Screen.Detail.route.replace("$RECIPE_ID_ARG={$RECIPE_ID_ARG}", "$RECIPE_ID_ARG=$id"))
+    navigate(Screen.Detail.createRoute(id), navOptions)
 }
+
 
 fun NavGraphBuilder.detailNavGraph(
     onBackClick: () -> Unit,

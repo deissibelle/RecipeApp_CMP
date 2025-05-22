@@ -28,8 +28,9 @@ sealed class Screen(
 
     data object Search : Screen("search", Res.string.search)
     data object Tabs : Screen("tabs", Res.string.tabs)
-    data object Detail : Screen("detail/{$RECIPE_ID_ARG}", Res.string.detail)
-
+    data object Detail : Screen("detail/{$RECIPE_ID_ARG}", Res.string.detail) {
+        fun createRoute(id: Long): String = "detail/$id"
+    }
     data object Home : Screen("home",
         Res.string.home,
         selectedIcon = Res.drawable.home_selected,

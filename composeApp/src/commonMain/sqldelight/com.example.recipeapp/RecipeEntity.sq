@@ -64,7 +64,7 @@ UPDATE Recipe
     difficulty = ?
     WHERE  id = ?;
 
-detelteRecipeById:
+deleteRecipeById:
 DELETE FROM Recipe WHERE id = ?;
 
 deleteAllRecipes:

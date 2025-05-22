@@ -115,7 +115,7 @@ class RecipeDao(
 
     suspend fun deleteRecipeById(id: Long) {
         dbHelper.withDatabase { database ->
-            database.recipeEntityQueries.detelteRecipeById(id)
+            database.recipeEntityQueries.deleteRecipeById(id)
         }
     }
 
